@@ -25,12 +25,17 @@ always @(*) begin
     `OP_XOR:  result = in_a ^  in_b;
     `OP_OR:   result = in_a |  in_b;
     `OP_AND:  result = in_a &  in_b;
-
-    //////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////
     // TODO : Add other operations
     // - The example below is given as a hint
     // - `OP_SRA: result = $signed(in_a) >>> in_b[4:0];
-    //////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////
+	`OP_SLL: result = in_a << in_b[4:0];
+    `OP_SRL: result = in_a >> in_b[4:0];
+    `OP_SRA: result = $signed(in_a) >>> in_b[4:0];
+    `OP_SLT: result = ($signed(in_a) < $signed(in_b)) ? 1:0;
+    `OP_SLTU: result = (in_a < in_b) ? 1:0;
+	// TODO END
     default:  result = 32'h0000_0000;
   endcase
 end
@@ -41,7 +46,9 @@ always @(*) begin
     //////////////////////////////////////////////////////////////////////////
     // TODO : Generate check signal
     //////////////////////////////////////////////////////////////////////////
-    default:  check = 1'b0;
+    `OP_SUB: check = (in_a - in_b == 0) ? 1:0;
+	// TODO END
+	default:  check = 1'b0;
   endcase
 end
 endmodule

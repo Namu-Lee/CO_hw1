@@ -11,8 +11,8 @@ tests = [
           [ 'task3/1', 'data/task3/1/inst_disassembled.mem', 'data/task3/1/reg-in.mem', 'data/task3/1/reg-out.mem' ],
           [ 'task3/2', 'data/task3/2/inst_disassembled.mem', 'data/task3/2/reg-in.mem', 'data/task3/2/reg-out.mem' ],
           [ 'task4/1', 'data/task4/1/inst_disassembled.mem', 'data/task4/1/reg-in.mem', 'data/task4/1/reg-out.mem' ],
-          [ 'task5/1', 'data/task5/1/inst_disassembled.mem', 'data/task5/1/reg-in.mem', 'data/task5/1/reg-out.mem' ],
-          [ 'fibonacci', 'data/fib/inst_disassembled.mem', 'data/fib/reg-in.mem', 'data/fib/reg-out.mem' ]
+          ['task5/1', 'data/task5/1/inst_disassembled.mem', 'data/task5/1/reg-in.mem', 'data/task5/1/reg-out.mem' ],
+          [ 'fibonacci', 'data/fib/inst_disassembled.mem', 'data/fib/reg-in.mem', 'data/fib/reg-out.mem'] 
         ]
 
 def get_ans_reg(path_to_reg):

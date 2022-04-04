@@ -29,6 +29,15 @@ module data_memory #(
       // TODO : Perform writes (select certain bits from write_data
       // according to maskmode
       ////////////////////////////////////////////////////////////////////////
+		case (maskmode)
+			// store byte (1B)
+			2'b00: mem_array[address_internal][7:0] = write_data[7:0];
+			// store half-word (2B)
+			2'b01: mem_array[address_internal][15:0] = write_data[15:0];
+			// store word (4B)
+			2'b10: mem_array[address_internal][31:0] = write_data[31:0];
+		endcase	
+	// TODO END
     end
   end
 
@@ -38,6 +47,19 @@ module data_memory #(
       ////////////////////////////////////////////////////////////////////////
       // TODO : Perform reads (select bits according to sext & maskmode)
       ////////////////////////////////////////////////////////////////////////
+		case ({sext, maskmode})
+			// load byte
+			3'b0_00: read_data = {{24{mem_array[address_internal][7]}}, mem_array[address_internal][7:0]};
+			// load half-word
+			3'b0_01: read_data = {{16{mem_array[address_internal][15]}}, mem_array[address_internal][15:0]};
+			// load word
+			3'b0_10: read_data = mem_array[address_internal];
+			// load byte Unsigned
+			3'b1_00: read_data = {{24{1'b0}}, mem_array[address_internal][7:0]};
+			// load half-word Unsigned
+			3'b1_01: read_data = {{16{1'b0}}, mem_array[address_internal][15:0]};
+		endcase
+		// TODO END
     end else begin
       read_data = 32'h0000_0000;
     end
