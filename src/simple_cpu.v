@@ -98,7 +98,6 @@ control m_control(
 /* m_register_file: register file */
 wire [DATA_WIDTH-1:0] write_data; 
 wire [DATA_WIDTH-1:0] read_data;
-wire [31:0] immediate;
 
 register_file m_register_file(
   .clk(clk),
@@ -115,7 +114,7 @@ register_file m_register_file(
 ///////////////////////////////////////////////////////////////////////////////
 // TODO : Immediate Generator
 //////////////////////////////////////////////////////////////////////////////
-//wire [31:0] immediate;
+wire signed [31:0] immediate;
 
 imm_generator imm_generator(
 	.instruction(instruction),
@@ -144,14 +143,7 @@ wire [31:0] alu_in2;
 ///////////////////////////////////////////////////////////////////////////////
 // TODO : Need a fix
 //////////////////////////////////////////////////////////////////////////////
-/*mux_2x1 mux_ALUSrc(
-	.select(alu_src),
-	.in1(rs2_out),
-	.in2(immediate),
-	
-	.out(alu_in2)
-);*/
- assign alu_in2 = (alu_src == 0) ? rs2_out:immediate;
+assign alu_in2 = (alu_src == 0) ? rs2_out:immediate;
 // TODO END
 //////////////////////////////////////////////////////////////////////////////
 
@@ -190,7 +182,8 @@ branch_control m_branch_control(
 // TODO : Currently, NEXT_PC is always PC_PLUS_4. Using adders and muxes & 
 // control signals, compute & assign the correct NEXT_PC.
 //////////////////////////////////////////////////////////////////////////////
-wire [31:0] PC_target;
+wire [31:0] PC_target = {1'b0, PC} + immediate;
+
 mux_2x1 mux_PC(
 	.select(taken),
 	.in1(PC_PLUS_4),

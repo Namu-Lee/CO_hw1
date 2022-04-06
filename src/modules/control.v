@@ -30,8 +30,8 @@ always @(*) begin
 	7'b0000011: controls = 10'b00_011_00_011;//Load (I)
 	7'b0100011: controls = 10'b00_00x_00_110;//Store (S)
 	7'b1100011: controls = 10'b00_10x_01_000;//B-type
-	7'b1101111: controls = 10'b01_00x_xx_0x1;//JAL (J)
-	7'b1100111: controls = 10'b10_00x_xx_0x1;//JALR (I)
+	7'b1101111: controls = 10'b01_000_00_0x1;//JAL (J)
+	7'b1100111: controls = 10'b10_000_00_0x1;//JALR (I)
 	// TODO END
     default:    controls = 10'b00_000_00_000;
   endcase

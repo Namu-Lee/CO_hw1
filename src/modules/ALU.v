@@ -46,7 +46,12 @@ always @(*) begin
     //////////////////////////////////////////////////////////////////////////
     // TODO : Generate check signal
     //////////////////////////////////////////////////////////////////////////
-    `OP_SUB: check = (in_a - in_b == 0) ? 1:0;
+	`OP_ADD: check = (in_a == in_b) ? 0:1;
+    `OP_SUB: check = (in_a == in_b) ? 1:0;
+	`OP_SLT: check = ($signed(in_a) < $signed(in_b)) ? 1:0;
+	`OP_BGE: check = ($signed(in_a) >= $signed(in_b)) ? 1:0;
+	`OP_SLTU: check = (in_a < in_b) ? 1:0;
+	`OP_BGEU: check = (in_a >= in_b) ? 1:0;
 	// TODO END
 	default:  check = 1'b0;
   endcase

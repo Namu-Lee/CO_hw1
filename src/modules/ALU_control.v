@@ -52,7 +52,14 @@ always @(*) begin
     ///////////////////////////////////////////////////////////////////////
     // TODO : select operation for branches
     ///////////////////////////////////////////////////////////////////////
-		alu_func = `OP_SUB;
+		case (funct3)
+			3'b000: alu_func = `OP_SUB; //beq
+			3'b001: alu_func = `OP_ADD; //bne
+			3'b100: alu_func = `OP_SLT; //blt
+			3'b101: alu_func = `OP_BGE; //bge
+			3'b110: alu_func = `OP_SLTU; //bltu
+			3'b111: alu_func = `OP_BGEU; //bgeu
+		endcase
 	// TODO END
     end
     2'b10: begin                // R-types
