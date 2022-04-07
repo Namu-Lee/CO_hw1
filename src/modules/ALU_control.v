@@ -42,14 +42,25 @@ assign funct = {funct7[5], funct3};
 always @(*) begin
   case (alu_op)
     2'b00: begin
-      ///////////////////////////////////////////////////////////////////////
-      // TODO : select operation for loads/stores
-      ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    // TODO : select operation for loads/stores
+    ///////////////////////////////////////////////////////////////////////
+		alu_func = `OP_ADD;
+	//TODO END
     end
     2'b01: begin
-      ///////////////////////////////////////////////////////////////////////
-      // TODO : select operation for branches
-      ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
+    // TODO : select operation for branches
+    ///////////////////////////////////////////////////////////////////////
+		case (funct3)
+			3'b000: alu_func = `OP_SUB; //beq
+			3'b001: alu_func = `OP_ADD; //bne
+			3'b100: alu_func = `OP_SLT; //blt
+			3'b101: alu_func = `OP_BGE; //bge
+			3'b110: alu_func = `OP_SLTU; //bltu
+			3'b111: alu_func = `OP_BGEU; //bgeu
+		endcase
+	// TODO END
     end
     2'b10: begin                // R-types
       case (funct)
@@ -70,6 +81,18 @@ always @(*) begin
       ///////////////////////////////////////////////////////////////////////
       // TODO : select operation for I-types with immediate
       ///////////////////////////////////////////////////////////////////////
+	casex (funct)
+		4'bx_000: alu_func = `OP_ADD;
+		4'bx_100: alu_func = `OP_XOR;
+		4'bx_110: alu_func = `OP_OR;
+		4'bx_111: alu_func = `OP_AND;
+		4'b0_001: alu_func = `OP_SLL;
+		4'b0_101: alu_func = `OP_SRL;
+		4'b1_101: alu_func = `OP_SRA;
+		4'bx_010: alu_func = `OP_SLT;
+		4'bx_011: alu_func = `OP_SLTU;
+		default: alu_func = `OP_EEE;
+	endcase
     end
     default: alu_func = `OP_EEE;       // should not fall here
   endcase
