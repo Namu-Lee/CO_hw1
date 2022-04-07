@@ -183,16 +183,30 @@ branch_control m_branch_control(
 // control signals, compute & assign the correct NEXT_PC.
 //////////////////////////////////////////////////////////////////////////////
 wire [31:0] PC_target = {1'b0, PC} + immediate;
+wire [31:0] PC_target_ind = $signed(rs1_out) + immediate;
+reg [31:0] tmp_PC;
 
-mux_2x1 mux_PC(
-	.select(taken),
-	.in1(PC_PLUS_4),
-	.in2(PC_target),
+always @(*) begin
+	casex ({jump,taken})
+		3'b000: tmp_PC = PC+32'd4;
+		3'b001: tmp_PC = PC_target;
+		3'b10x: tmp_PC = PC_target;
+		3'b11x: tmp_PC = {PC_target_ind[31:1], 1'b0};
+		default: tmp_PC = PC+32'd4;
+	endcase
+end
+assign NEXT_PC = tmp_PC;
+/*
+mux_4x1 mux_PC(
+	.select({jump[0], taken}),
+	.in1(PC_PLUS_4), //00
+	.in2(PC_target), //01
+	.in3(), //10
+	.in4(), //11
 
 	.out(NEXT_PC)
-);
+);*/
 // TODO END
-//assign NEXT_PC = PC_PLUS_4;
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -222,7 +236,16 @@ data_memory m_data_memory(
 ///////////////////////////////////////////////////////////////////////////////
 // TODO : Need a fix
 //////////////////////////////////////////////////////////////////////////////
-assign write_data = (mem_to_reg == 0) ? alu_out:read_data;
+
+mux_4x1 mux_WriteBack(
+	.select({jump[1],mem_to_reg}),
+	.in1(alu_out),
+	.in2(read_data),
+	.in3(PC_PLUS_4),
+	.in4(PC_PLUS_4),
+
+	.out(write_data)
+);
 // TODO END
 
 //////////////////////////////////////////////////////////////////////////////
